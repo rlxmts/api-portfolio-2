@@ -1,3 +1,4 @@
+import cors from 'cors';
 import chalk from 'chalk';
 import express from 'express';
 import conectaApi from './config/dbConnect.js';
@@ -14,5 +15,6 @@ conexao.once('open', ()=> {
 })
 
 const app = express();
+app.use(cors());
 routes(app);
 export default app;
