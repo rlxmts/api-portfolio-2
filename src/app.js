@@ -3,6 +3,7 @@ import chalk from "chalk";
 import express from "express";
 import conectaApi from "./config/dbConnect.js";
 import routes from "./routes/index.js";
+import trataErros from "./middleware/trataErros.js";
 
 const conexao = await conectaApi();
 
@@ -17,4 +18,5 @@ conexao.once("open", ()=> {
 const app = express();
 app.use(cors());
 routes(app);
+app.use(trataErros);
 export default app;
