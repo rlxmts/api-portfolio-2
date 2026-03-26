@@ -1,10 +1,26 @@
 import projeto from "../models/Projetos.js";
+import ErroRequisicao from "../erros/ErroRequisicao.js";
 
 class projetoController {
   static async buscaProjetos (req, res, next){
     try{
-      const listaProjetos = await projeto.find({});
-      res.status(200).json(listaProjetos);
+
+      let {limit = 5, page = 1, campoOrd = "_id", order = -1} = req.query;
+
+      limit = parseInt(limit);
+      page = parseInt(page);
+      order = parseInt(order);
+
+      if(limit > 0 || page > 0){
+        const listaProjetos = await projeto.find({})
+          .sort({ [campoOrd]: order })
+          .skip((page - 1) * limit)
+          .limit(limit);
+  
+        res.status(200).json(listaProjetos);
+      }else{
+        next(ErroRequisicao());
+      }
     }catch(erro){
       next(erro);
     }
